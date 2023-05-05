@@ -1,8 +1,38 @@
-import vertShader from '../shaders/wave-transition/wave-transition.vert';
-import fragShader from '../shaders/wave-transition/wave-transition.frag';
+import transitionVertShader from '../shaders/wave-transition/wave-transition.vert';
+import transitionFragShader from '../shaders/wave-transition/wave-transition.frag';
+
+import concVertShader from '../shaders/concentric-circles/concentric-circles.vert';
+import concFragShader from '../shaders/concentric-circles/concentric-circles.frag';
 
 import dotsVertShader from '../shaders/dots/dots.vert';
 import dotsFragShader from '../shaders/dots/dots.frag';
+
+import squareVertShader from '../shaders/square/square.vert';
+import squareFragShader from '../shaders/square/square.frag';
+
+type Shader = {
+  vert: string;
+  frag: string;
+};
+
+const shaders: { [key: string]: Shader } = {
+  transition: {
+    vert: transitionVertShader,
+    frag: transitionFragShader,
+  },
+  concentric: {
+    vert: concVertShader,
+    frag: concFragShader,
+  },
+  dots: {
+    vert: dotsVertShader,
+    frag: dotsFragShader,
+  },
+  square: {
+    vert: squareVertShader,
+    frag: squareFragShader,
+  },
+};
 
 export class Wave {
   static gl: WebGLRenderingContext;
@@ -12,10 +42,22 @@ export class Wave {
     private vertexBuffer: WebGLBuffer,
     private gl: WebGLRenderingContext,
     private program: WebGLProgram,
-    private uniforms: { [key: string]: WebGLUniformLocation | null }
+    private uniforms: { [key: string]: WebGLUniformLocation | null },
+    private vertexLocation: number
   ) {}
 
   render(t: number, rotation: number[]) {
+    this.gl.enableVertexAttribArray(this.vertexLocation);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
+    this.gl.vertexAttribPointer(
+      this.vertexLocation,
+      2,
+      this.gl.FLOAT,
+      false,
+      0,
+      0
+    );
+
     this.gl.useProgram(this.program);
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
     this.gl.bufferData(
@@ -31,7 +73,7 @@ export class Wave {
     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertices.length / 2);
   }
 
-  static initialise = (gl: WebGLRenderingContext, n: number) => {
+  static initialise = (gl: WebGLRenderingContext, shader: Shader) => {
     let points: number[] = [];
 
     points = [-1, 1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1];
@@ -39,12 +81,12 @@ export class Wave {
 
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
     if (!vertexShader) throw new Error('no vertex shader found');
-    gl.shaderSource(vertexShader, vertShader);
+    gl.shaderSource(vertexShader, shader.vert);
     gl.compileShader(vertexShader);
 
     const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
     if (!fragmentShader) throw new Error('no fragment shader found');
-    gl.shaderSource(fragmentShader, fragShader);
+    gl.shaderSource(fragmentShader, shader.frag);
     gl.compileShader(fragmentShader);
 
     const program = gl.createProgram();
@@ -75,7 +117,10 @@ export class Wave {
       vertexBuffer,
       gl,
       program,
-      uniforms
+      uniforms,
+      vertexLocation
     );
   };
+
+  static getShaders = () => shaders;
 }
