@@ -1,0 +1,1 @@
+{"mappings":"ACAA,cAIA","sources":["index.f5f1daee.css","src/styles.css"],"sourcesContent":["body {\n  margin: 0;\n}\n\n.buttons {\n  position: fixed;\n  bottom: 0;\n}\n\n/*# sourceMappingURL=index.f5f1daee.css.map */\n","body {\n  margin: 0;\n}\n\n.buttons {\n  position: fixed;\n  bottom: 0;\n}\n"],"names":[],"version":3,"file":"index.f5f1daee.css.map"}
