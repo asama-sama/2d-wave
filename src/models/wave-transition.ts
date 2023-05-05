@@ -10,6 +10,9 @@ import dotsFragShader from '../shaders/dots/dots.frag';
 import squareVertShader from '../shaders/square/square.vert';
 import squareFragShader from '../shaders/square/square.frag';
 
+import spiralVertShader from '../shaders/spiral/spiral.vert';
+import spiralFragShader from '../shaders/spiral/spiral.frag';
+
 type Shader = {
   vert: string;
   frag: string;
@@ -31,6 +34,10 @@ const shaders: { [key: string]: Shader } = {
   square: {
     vert: squareVertShader,
     frag: squareFragShader,
+  },
+  spiral: {
+    vert: spiralVertShader,
+    frag: spiralFragShader,
   },
 };
 
