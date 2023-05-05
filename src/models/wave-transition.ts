@@ -46,7 +46,8 @@ export class Wave {
     private vertexLocation: number
   ) {}
 
-  render(t: number, rotation: number[]) {
+  activateProgram() {
+    this.gl.useProgram(this.program);
     this.gl.enableVertexAttribArray(this.vertexLocation);
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
     this.gl.vertexAttribPointer(
@@ -57,8 +58,9 @@ export class Wave {
       0,
       0
     );
+  }
 
-    this.gl.useProgram(this.program);
+  render(t: number, rotation: number[]) {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
     this.gl.bufferData(
       this.gl.ARRAY_BUFFER,
@@ -98,9 +100,6 @@ export class Wave {
     const vertexBuffer = gl.createBuffer();
     if (!vertexBuffer) throw new Error('no buffer found');
     const vertexLocation = gl.getAttribLocation(program, 'vertex');
-    gl.enableVertexAttribArray(vertexLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-    gl.vertexAttribPointer(vertexLocation, 2, gl.FLOAT, false, 0, 0);
 
     const tLocation = gl.getUniformLocation(program, 't');
     const rotation = gl.getUniformLocation(program, 'rotation');

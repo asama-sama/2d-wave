@@ -17,6 +17,7 @@ for (let shaderKey of Object.keys(waveShaders)) {
   wavePrograms[shaderKey] = wave;
 }
 let activeProgram = wavePrograms[selectedShader];
+activeProgram.activateProgram();
 
 const viewMatrix = mat4.create();
 mat4.multiplyScalar(viewMatrix, viewMatrix, 0.5);
@@ -27,6 +28,7 @@ for (let shaderKey of Object.keys(waveShaders)) {
   const button = document.createElement('button');
   button.addEventListener('click', (e) => {
     activeProgram = wavePrograms[shaderKey];
+    activeProgram.activateProgram();
   });
   button.innerHTML = shaderKey;
   buttons.appendChild(button);
